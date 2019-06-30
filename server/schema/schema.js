@@ -10,12 +10,12 @@ const {
 } = graphql;
 
 let books = [
-  { name: 'name1', genre: 'Fantasy', id: '1', authorId: 1 },
-  { name: 'name2', genre: 'Fantasy', id: '2', authorId: 2 },
-  { name: 'name3', genre: 'Sci-Fi', id: '3', authorId: 3 },
-  { name: 'name4', genre: 'Fantasy', id: '4', authorId: 2 },
-  { name: 'name5', genre: 'Fantasy', id: '5', authorId: 2 },
-  { name: 'name6', genre: 'Sci-Fi', id: '6', authorId: 3 }
+  { name: 'book1', genre: 'Fantasy', id: '1', authorId: 1 },
+  { name: 'book2', genre: 'Fantasy', id: '2', authorId: 2 },
+  { name: 'book3', genre: 'Sci-Fi', id: '3', authorId: 3 },
+  { name: 'book4', genre: 'Fantasy', id: '4', authorId: 2 },
+  { name: 'book5', genre: 'Fantasy', id: '5', authorId: 2 },
+  { name: 'book6', genre: 'Sci-Fi', id: '6', authorId: 3 }
 ];
 
 let authors = [
@@ -70,6 +70,18 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         return authors.find(author => author.id === args.id);
+      }
+    },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args) {
+        return books;
+      }
+    },
+    authors: {
+      type: new GraphQLList(authorType),
+      resolve(parent, args) {
+        return authors;
       }
     }
   }
