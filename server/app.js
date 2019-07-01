@@ -10,7 +10,7 @@ const app = express();
 mongoose.connect(
   `mongodb+srv://sayaka:${
     config.mongoPass
-  }@cluster0-k5u2y.mongodb.net/test?retryWrites=true&w=majority`,
+  }@cluster0-k5u2y.mongodb.net/gql?retryWrites=true&w=majority`,
   { useNewUrlParser: true }
 );
 mongoose.connection.once('open', () => {
