@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { graphql, compose } from 'react-apollo';
-import { getAuthorsQuery, addBookMutation } from '../queries/queries';
+import {
+  getAuthorsQuery,
+  addBookMutation,
+  getBooksQuery
+} from '../queries/queries';
 
 const AddBook = props => {
   const [bookName, setBookName] = useState('');
@@ -24,7 +28,8 @@ const AddBook = props => {
         name: bookName,
         genre,
         authorId
-      }
+      },
+      refetchQueries: [{ query: getBooksQuery }]
     });
   };
 
