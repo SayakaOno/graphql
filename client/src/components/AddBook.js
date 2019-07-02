@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
-import { gql } from 'apollo-boost';
-import { graphql } from 'react-apollo';
-
-const getAuthorsQuery = gql`
-  {
-    authors {
-      name
-      id
-    }
-  }
-`;
+import { graphql, compose } from 'react-apollo';
+import { getAuthorsQuery, addBookMutation } from '../queries/queries';
 
 const AddBook = props => {
   const [bookName, setBookName] = useState('');
   const [genre, setGenre] = useState('');
-  const [author, setAuthor] = useState('');
+  const [authorId, setAuthorId] = useState('');
 
   const handleForm = (event, label) => {
     if (label === 'bookName') {
       setBookName(event.target.value);
     } else if (label === 'genre') {
       setGenre(event.target.value);
-    } else if (label === 'author') {
-      setAuthor(event.target.value);
+    } else if (label === 'authorId') {
+      setAuthorId(event.target.value);
     }
   };
 
+  const submitForm = event => {
+    event.preventDefault();
+    props.addBookMutation({
+      variables: {
+        name: bookName,
+        genre,
+        authorId
+      }
+    });
+  };
+
   const renderAuthors = () => {
-    let data = props.data;
+    let data = props.getAuthorsQuery;
     if (data.loading) {
       return <option disabled>Loading Authors...</option>;
     } else {
@@ -60,14 +62,17 @@ const AddBook = props => {
       </div>
       <div className="field">
         <label>Author</label>
-        <select onChange={e => handleForm(e, 'author')} value={author}>
+        <select onChange={e => handleForm(e, 'authorId')} value={authorId}>
           <option>Select author</option>
           {renderAuthors()}
         </select>
       </div>
-      <button>+</button>
+      <button onClick={submitForm}>+</button>
     </form>
   );
 };
 
-export default graphql(getAuthorsQuery)(AddBook);
+export default compose(
+  graphql(getAuthorsQuery, { name: 'getAuthorsQuery' }),
+  graphql(addBookMutation, { name: 'addBookMutation' })
+)(AddBook);
