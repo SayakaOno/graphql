@@ -8,7 +8,7 @@ const BookList = props => {
 
   const renderBooks = () => {
     let data = props.data;
-    if (data.loading) {
+    if (!data.books || data.loading) {
       return <div>Loading books...</div>;
     } else {
       return data.books.map(book => (

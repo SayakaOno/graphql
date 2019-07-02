@@ -23,19 +23,26 @@ const AddBook = props => {
 
   const submitForm = event => {
     event.preventDefault();
-    props.addBookMutation({
-      variables: {
-        name: bookName,
-        genre,
-        authorId
-      },
-      refetchQueries: [{ query: getBooksQuery }]
-    });
+    if (bookName && genre && authorId) {
+      props.addBookMutation({
+        variables: {
+          name: bookName,
+          genre,
+          authorId
+        },
+        refetchQueries: [{ query: getBooksQuery }]
+      });
+      setAuthorId('');
+      setBookName('');
+      setGenre('');
+    } else {
+      alert('Please provide all the information!');
+    }
   };
 
   const renderAuthors = () => {
     let data = props.getAuthorsQuery;
-    if (data.loading) {
+    if (!data.authors || data.loading) {
       return <option disabled>Loading Authors...</option>;
     } else {
       return data.authors.map(author => {
@@ -68,7 +75,7 @@ const AddBook = props => {
       <div className="field">
         <label>Author</label>
         <select onChange={e => handleForm(e, 'authorId')} value={authorId}>
-          <option>Select author</option>
+          <option value="">Select author</option>
           {renderAuthors()}
         </select>
       </div>
